@@ -7,6 +7,9 @@ io.on('connection', (socket) => {
     socket.on('disconnect', () => {
         console.log('X desconectou: ' + socket.id);
     });
+    socket.on('message', (data) => {
+        socket.emit('showMessage', data);
+    });
 })
 
 app.set('view engine', 'ejs');

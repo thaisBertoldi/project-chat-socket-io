@@ -29,10 +29,10 @@
                       <p class="small mb-0">Mensagem 1</p>
                     </div>
                   </div>
-                  <div class="form-outline" id="mensagem">
-                    <textarea class="form-control mb-2" id="textAreaExample" rows="4" placeholder="Escreva sua mensagem"></textarea>
+                  <div class="form-outline">
+                    <textarea class="form-control mb-2" id="textAreaMessage" rows="4" placeholder="Escreva sua mensagem"></textarea>
                     <input class="form-control mb-2" type="text" name="" id="username" placeholder="Seu nome de usuário">
-                    <button>Enviar</button>
+                    <button onclick="sendMessage()">Enviar</button>
                   </div>
       
                 </div>
@@ -51,5 +51,10 @@
 <script>
     const socket = io('http://localhost:3000');
     socket.on('disconnect', () => {});
+    const sendMessage = () => {
+        const messageValue = document.getElementById('textAreaMessage').value;
+        const usernameValue = document.getElementById('username').value;
+        socket.emit('message', { message: messageValue, username: usernameValue });
+    };
 </script>
 </html>
