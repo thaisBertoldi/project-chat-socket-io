@@ -23,10 +23,9 @@
                   <p class="mb-0 fw-bold">Meu chat</p>
                   <i class="fas fa-times"></i>
                 </div>
-                <div class="card-body" id="chat">
+                <div class="card-body">
                   <div class="d-flex flex-row justify-content-end mb-4">
-                    <div class="p-3 me-3 border" style="border-radius: 15px;">
-                      <p class="small mb-0">Mensagem 1</p>
+                    <div class="p-3 me-3 border" style="border-radius: 15px;" id="chat">
                     </div>
                   </div>
                   <div class="form-outline">
@@ -51,6 +50,12 @@
 <script>
     const socket = io('http://localhost:3000');
     socket.on('disconnect', () => {});
+    socket.on('showMessage', (data) => {
+        const chat =  document.getElementById('chat');
+        const paragraphChat = document.createElement('p');
+        paragraphChat.innerHTML = `${data.username} disse: ${data.message}`;
+        chat.append(paragraphChat);
+    })
     const sendMessage = () => {
         const messageValue = document.getElementById('textAreaMessage').value;
         const usernameValue = document.getElementById('username').value;
