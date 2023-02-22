@@ -9,8 +9,14 @@
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-    <section style="background-color: #eee;">
-        <div class="container py-5">
+    <section class="chatBackground">
+        <div id='acesso_usuario'>
+            <form id='login' class="formGroup">
+                <input type='text' placeholder='Insira seu apelido' name='nickname' id='nickname' class="form-control" />
+                <input type='submit' value='Entrar' onclick="getLogin(event)" class="btn btn-info" />
+            </form>
+       </div>
+        <div class="container py-5" id="sala_chat">
       
           <div class="row d-flex justify-content-center">
             <div class="col-md-8 col-lg-6 col-xl-4">
@@ -24,13 +30,12 @@
                   <i class="fas fa-times"></i>
                 </div>
                 <div class="card-body">
-                  <div class="d-flex flex-row justify-content-end mb-4">
-                    <div class="p-3 me-3 border" style="border-radius: 15px;" id="chat">
+                  <div class="d-flex flex-row justify-content-end mb-4 containerChat">
+                    <div class="p-3 me-3" id="chat">
                     </div>
                   </div>
                   <div class="form-outline">
                     <textarea class="form-control mb-2" id="textAreaMessage" rows="4" placeholder="Escreva sua mensagem"></textarea>
-                    <input class="form-control mb-2" type="text" name="" id="username" placeholder="Seu nome de usuário">
                     <button onclick="sendMessage()">Enviar</button>
                   </div>
       
@@ -50,16 +55,37 @@
 <script>
     const socket = io('http://localhost:3000');
     socket.on('disconnect', () => {});
+    const getLogin = (e) => {
+        e.preventDefault();
+        const nickname = document.getElementById('nickname').value;
+        socket.emit("nickname", nickname);
+        const divnickname = document.getElementById('acesso_usuario');
+        divnickname.style.display = 'none';
+        const divSalaChat = document.getElementById('sala_chat');
+        divSalaChat.style.display = 'block';
+    }
+    const pegarDataAtual =() => {
+        const dataAtual = new Date();
+        const dia = (dataAtual.getDate()<10 ? '0' : '') + dataAtual.getDate();
+        const mes = ((dataAtual.getMonth() + 1)<10 ? '0' : '') + (dataAtual.getMonth() + 1);
+        const ano = dataAtual.getFullYear();
+        const hora = (dataAtual.getHours()<10 ? '0' : '') + dataAtual.getHours();
+        const minuto = (dataAtual.getMinutes()<10 ? '0' : '') + dataAtual.getMinutes();
+        const segundo = (dataAtual.getSeconds()<10 ? '0' : '') + dataAtual.getSeconds();
+
+        const dataFormatada = dia + "/" + mes + "/" + ano + " " + hora + ":" + minuto + ":" + segundo;
+        return dataFormatada;
+    }
     socket.on('showMessage', (data) => {
         const chat =  document.getElementById('chat');
         const paragraphChat = document.createElement('p');
-        paragraphChat.innerHTML = `${data.username} disse: ${data.message}`;
+        paragraphChat.innerHTML = `[${pegarDataAtual()}]: ${data.nickname} disse: ${data.mensagem.message}`;
         chat.append(paragraphChat);
     })
     const sendMessage = () => {
-        const messageValue = document.getElementById('textAreaMessage').value;
-        const usernameValue = document.getElementById('username').value;
-        socket.emit('message', { message: messageValue, username: usernameValue });
+        let messageValue = document.getElementById('textAreaMessage').value;
+        socket.emit('message', { message: messageValue });
+        document.getElementById('textAreaMessage').value = '';
     };
 </script>
 </html>

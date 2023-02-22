@@ -5,11 +5,18 @@ const io = require('socket.io')(http);
 
 io.on('connection', (socket) => {
     socket.on('disconnect', () => {
-        console.log('X desconectou: ' + socket.id);
+        console.log('Desconectou: ' + socket.id);
     });
-    socket.on('message', (data) => {
-        socket.emit('showMessage', data);
-    });
+    socket.on('nickname', (nickname) => {
+        socket.on('message', (message) => {
+            const data = {
+                nickname: nickname,
+                mensagem: message
+            }
+            io.emit('showMessage', data);
+        });
+    })
+
 })
 
 app.set('view engine', 'ejs');

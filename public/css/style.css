@@ -1,16 +1,52 @@
+#sala_chat {
+  display: none;
+}
+
+#acesso_usuario {
+  height: 30px;
+  left: 50%;
+  margin-left: -160px;
+  margin-top: -15px;
+  position: fixed;
+  top: 50%;
+  width: 320px;
+}
+#acesso_usuario form {
+  margin: 0;
+}
+
 #chat2 .form-control {
-    border-color: transparent;
-    }
-    
-    #chat2 .form-control:focus {
-    border-color: transparent;
-    box-shadow: inset 0px 0px 0px 1px transparent;
-    }
-    
-    .divider:after,
-    .divider:before {
-    content: "";
-    flex: 1;
-    height: 1px;
-    background: #eee;
-    }
+  border-color: transparent;
+}
+
+#chat2 .form-control:focus {
+  border-color: transparent;
+  box-shadow: inset 0px 0px 0px 1px transparent;
+}
+
+.divider:after,
+.divider:before {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: #eee;
+}
+
+.chatBackground {
+  background-color: #eee;
+}
+
+.containerChat {
+  max-height: 250px;
+  min-height: 250px;
+  overflow-y: scroll;
+}
+
+.containerChat::-webkit-scrollbar {
+  width: 10px;
+}
+
+.formGroup {
+    display: flex;
+    gap: 5px;
+}
