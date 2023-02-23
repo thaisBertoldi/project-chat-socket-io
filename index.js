@@ -7,15 +7,16 @@ io.on('connection', (socket) => {
     socket.on('disconnect', () => {
         console.log('Desconectou: ' + socket.id);
     });
-    socket.on('nickname', (nickname) => {
+    socket.on('infoUser', (info) => {
         socket.on('message', (message) => {
             const data = {
-                nickname: nickname,
-                mensagem: message
+                nickname: info.nickname,
+                mensagem: message,
+                color: info.color
             }
             io.emit('showMessage', data);
         });
-    })
+    });
 
 })
 

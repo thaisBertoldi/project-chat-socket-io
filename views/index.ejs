@@ -15,6 +15,17 @@
                 <input type='text' placeholder='Insira seu apelido' name='nickname' id='nickname' class="form-control" />
                 <input type='submit' value='Entrar' onclick="getLogin(event)" class="btn btn-info" />
             </form>
+            <Label>Escolha uma cor:</Label>
+            <input type="color" id="cores" name="ArcoIris" list="arcoIris" value="#FF0000">
+                <datalist id="arcoIris">
+                    <option value="#FF0000">Vermelho</option>
+                    <option value="#FFA500">Laranja</option>
+                    <option value="#FFFF00">Amarelo</option>
+                    <option value="#008000">Verde</option>
+                    <option value="#0000FF">Azul</option>
+                    <option value="#4B0082">Indigo</option>
+                    <option value="#EE82EE">Violeta</option>
+                </datalist>
        </div>
         <div class="container py-5" id="sala_chat">
       
@@ -57,8 +68,10 @@
     socket.on('disconnect', () => {});
     const getLogin = (e) => {
         e.preventDefault();
-        const nickname = document.getElementById('nickname').value;
-        socket.emit("nickname", nickname);
+        socket.emit("infoUser", {
+            nickname: document.getElementById('nickname').value,
+            color:  document.getElementById('cores').value
+        });
         const divnickname = document.getElementById('acesso_usuario');
         divnickname.style.display = 'none';
         const divSalaChat = document.getElementById('sala_chat');
@@ -76,12 +89,16 @@
         const dataFormatada = dia + "/" + mes + "/" + ano + " " + hora + ":" + minuto + ":" + segundo;
         return dataFormatada;
     }
+
     socket.on('showMessage', (data) => {
+        console.log(data)
         const chat =  document.getElementById('chat');
         const paragraphChat = document.createElement('p');
         paragraphChat.innerHTML = `[${pegarDataAtual()}]: ${data.nickname} disse: ${data.mensagem.message}`;
         chat.append(paragraphChat);
+        paragraphChat.style.color = data.color;
     })
+
     const sendMessage = () => {
         let messageValue = document.getElementById('textAreaMessage').value;
         socket.emit('message', { message: messageValue });
